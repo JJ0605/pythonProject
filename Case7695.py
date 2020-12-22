@@ -1,103 +1,20 @@
+# Case 7695
 from selenium import webdriver
 from selenium.webdriver.support.select import Select
 from time import sleep
-from tkinter import *
 import os
-
-# 赋予按钮功能
-import Case7695
-
-
-def submit():
-    printdevice()
-    closewindow()
+from main import getDeviceName
+from main import isElementExist
+from main import deviceFolder
+from main import isInputExist
 
 
-def printdevice():
-    print(getDeviceName())
+##实例化浏览器并显示
+print("7695 is begin")
 
-
-def closewindow():
-    root.destroy()
-
-def deviceFolder():
-    return file
-
-# 创建文件夹
-def mkdir(path):
-    folder = os.path.exists(path)
-    if not folder:
-        os.makedirs(path)
-        print('Create Success')
-    else:
-        print("--- Device Folder is exist ----")
-
-
-# 判断元素是否存在
-def isElementExist(element):
-    flag = True
-    try:
-        browser.find_element_by_css_selector(element)
-        return flag
-    except:
-        flag = False
-        return flag
-
-
-def isInputExist(element):
-    try:
-        browser.find_element_by_css_selector(element)
-        return True
-    except:
-        return False
-
-
-def getDeviceName():
-    return u.get()
-
-# 定义输入设备名的窗口
-root = Tk()
-root.title('GET DEVICE NAME')
-frame = Frame(root)
-frame.pack(padx=8, pady=8, ipadx=4)  # 设置边距
-label = Label(frame, text="Device Name:")
-label.grid(row=0, column=0, padx=5, pady=5, sticky=W)
-
-
-# 定义窗口内容
-u = StringVar()
-deviceget = Entry(frame, textvariable=u)
-deviceget.grid(row=0, column=1, sticky='ew', columnspan=2)
-button = Button(frame, text="OK", command=submit, default='active')
-button.grid(row=2, column=1)
-
-
-
-# 居中显示窗口和窗口大小
-root.update_idletasks()
-x = (root.winfo_screenwidth() - root.winfo_reqwidth()) / 2
-y = (root.winfo_screenheight() - root.winfo_reqheight()) / 2
-root.geometry("+%d+%d" % (x, y))
-root.geometry('380x80')
-root.mainloop()
-
-# 创建一个设备的文件夹
-file = "C:\\download\\" + getDeviceName()
-# 配置下载的选择项
 options = webdriver.ChromeOptions()
 prefs = {"download.default_directory": "C:\\download\\" + getDeviceName(), "download.prompt_for_download": False}
 options.add_experimental_option('prefs', prefs)
-# 不显示浏览器
-# option=Options()
-# option.add_argument('--headless')
-# browser=webdriver.Chrome(chrome_options=option)
-
-#Case7695
-
-
-# 以下就是Case 7692 的内容
-
-##实例化浏览器并显示
 browser = webdriver.Chrome(chrome_options=options)
 # 导入网址
 browser.get("http://dkcphweb15/Xpress/28.X.Development/MDCT/thin-client")
@@ -118,10 +35,10 @@ strs = browser.current_url
 if strs == "http://dkcphweb15/Xpress/28.X.Development/MDCT/select-devices":
     print('Enter select-devices page success')
 else:
-    print('Fail,Something wrongs')
+    print('Enter select-devices page fail')
 
 # 选择设备添加到右侧中
-browser.find_element_by_xpath("//label[contains(text(),'" + getDeviceName() + "')]").click()
+browser.find_element_by_xpath("//label[contains(text(),'" + getDeviceName()+ "')]").click()
 browser.find_element_by_id('btnAdd').click()
 
 # 进入到设置项页
@@ -130,9 +47,9 @@ browser.find_element_by_xpath("//input[@value='NEXT >']").click()
 # 判断
 strs = browser.current_url
 if strs == "http://dkcphweb15/Xpress/28.X.Development/MDCT/configuration":
-    print('Third success')
+    print('Enter cofiguretion')
 else:
-    print('Fail,Something wrongs')
+    print('Enter cofiguretion fail')
 
 # 选择版本
 fw_select = browser.find_element_by_css_selector("select[name='configurationViewModel.Devices[0].SelectedFirmware.Id']")
@@ -193,13 +110,13 @@ browser.find_element_by_xpath("//input[@value='NEXT >']").click()
 browser.find_element_by_xpath("//input[@value='DOWNLOAD SUMMARY']").click()
 # 重命名summary文件
 sleep(5)
-summary = file + '\\summary.html'
-renamesummary = file + '\\7692.html'
+summary = deviceFolder() + '\\summary.html'
+renamesummary = deviceFolder() + '\\7695.html'
 try:
     os.rename(summary, renamesummary)
-    print(getDeviceName() + '7692 summary download successful')
-    summary = file + '\\JabraXpressFiles.zip'
-    renamesummary = file + '\\7692.zip'
+    print(getDeviceName() + '7695 summary download successful')
+    summary = deviceFolder() + '\\JabraXpressFiles.zip'
+    renamesummary = deviceFolder() + '\\7695.zip'
 except Exception as e:
     print(e)
 # 返回到下载页
@@ -213,11 +130,10 @@ browser.find_element_by_id('downloadZip').click()
 sleep(80)
 try:
     os.rename(summary, renamesummary)
-    print(getDeviceName() + '7692 download successful')
+    print(getDeviceName() + '7695 download successful')
     browser.close()
 except Exception as e:
     sleep(40)
     os.rename(summary, renamesummary)
     print('rename success')
     browser.close()
-
